@@ -1,14 +1,16 @@
 import { Search, Bell, Activity } from 'lucide-react';
 import { useDashboardStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n';
 import { useEffect, useState } from 'react';
 
 export function TopBar() {
   const markets = useDashboardStore((s) => s.markets);
+  const { t } = useI18n();
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const t = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   return (
@@ -32,7 +34,7 @@ export function TopBar() {
       <div className="flex items-center gap-3 shrink-0">
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
           <Activity className="w-3 h-3 text-accent animate-pulse" />
-          <span>LIVE</span>
+          <span>{t('topbar.live')}</span>
         </div>
         <span className="text-xs font-mono text-muted-foreground">
           {time.toLocaleTimeString('en-US', { hour12: false })} UTC

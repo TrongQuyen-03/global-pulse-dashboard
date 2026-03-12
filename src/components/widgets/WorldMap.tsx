@@ -2,6 +2,9 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useDashboardStore } from '@/lib/store';
 import 'leaflet/dist/leaflet.css';
 
+const SATELLITE_TILE = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+const LABELS_TILE = 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}';
+
 const severityColor: Record<string, string> = {
   critical: '#EF4444',
   high: '#F59E0B',
@@ -30,7 +33,8 @@ export function WorldMap() {
         scrollWheelZoom={true}
         minZoom={2}
       >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <TileLayer url={SATELLITE_TILE} />
+        <TileLayer url={LABELS_TILE} />
         {events.map((event) => (
           <CircleMarker
             key={event.id}

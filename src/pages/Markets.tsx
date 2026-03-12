@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useDashboardStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n';
 import { WidgetCard } from '@/components/widgets/WidgetCard';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts';
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts';
 
 function generateHistory(base: number, points: number = 24) {
   const data = [];
@@ -18,6 +19,7 @@ function generateHistory(base: number, points: number = 24) {
 export default function Markets() {
   const markets = useDashboardStore((s) => s.markets);
   const updateMarkets = useDashboardStore((s) => s.updateMarkets);
+  const { t } = useI18n();
   const [selectedMarket, setSelectedMarket] = useState(markets[0]?.symbol || 'BTC');
 
   useEffect(() => {
@@ -28,20 +30,13 @@ export default function Markets() {
   const selected = markets.find((m) => m.symbol === selectedMarket) || markets[0];
   const history = generateHistory(selected.price);
 
-  const typeGroups = {
-    crypto: markets.filter((m) => m.type === 'crypto'),
-    commodity: markets.filter((m) => m.type === 'commodity'),
-    index: markets.filter((m) => m.type === 'index'),
-  };
-
   return (
     <div className="space-y-4">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-foreground">Financial Market Monitor</h1>
-        <p className="text-sm text-muted-foreground mt-1">Real-time tracking of crypto, commodities, and global indices</p>
+        <h1 className="text-2xl font-bold text-foreground">{t('markets.title')}</h1>
+        <p className="text-sm text-muted-foreground mt-1">{t('markets.subtitle')}</p>
       </motion.div>
 
-      {/* Market cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {markets.map((m, i) => (
           <motion.div
@@ -66,8 +61,7 @@ export default function Markets() {
         ))}
       </div>
 
-      {/* Chart */}
-      <WidgetCard title={`${selected.name} (${selected.symbol}) — 24h Chart`}>
+      <WidgetCard title={`${selected.name} (${selected.symbol}) — ${t('markets.chart_24h')}`}>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={history}>
@@ -87,8 +81,7 @@ export default function Markets() {
         </div>
       </WidgetCard>
 
-      {/* Market heatmap */}
-      <WidgetCard title="Market Heatmap">
+      <WidgetCard title={t('markets.heatmap')}>
         <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
           {markets.map((m) => {
             const intensity = Math.min(Math.abs(m.changePercent) / 3, 1);

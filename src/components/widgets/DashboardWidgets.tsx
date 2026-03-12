@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useDashboardStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n';
 import { AlertTriangle, TrendingUp, TrendingDown } from 'lucide-react';
 
 const severityStyles: Record<string, string> = {
@@ -144,10 +145,12 @@ export function DisasterAlerts() {
 }
 
 export function AIInsights() {
+  const { t } = useI18n();
+
   const insights = [
-    { title: 'Global Risk Index', value: 'ELEVATED', color: 'text-warning', detail: 'Multiple active conflicts and natural disasters contributing to elevated global risk levels.' },
-    { title: 'Market Sentiment', value: 'CAUTIOUS', color: 'text-primary', detail: 'Mixed signals from central banks. Crypto showing strength while energy markets remain volatile.' },
-    { title: 'Top Trend', value: 'Energy Crisis', color: 'text-destructive', detail: 'EU energy security measures dominating policy discussions. Impact on global supply chains expected.' },
+    { title: t('insight.global_risk'), value: t('insight.elevated'), color: 'text-warning', detail: t('insight.risk_detail') },
+    { title: t('insight.market_sentiment'), value: t('insight.cautious'), color: 'text-primary', detail: t('insight.market_detail') },
+    { title: t('insight.top_trend'), value: t('insight.energy_crisis'), color: 'text-destructive', detail: t('insight.trend_detail') },
   ];
 
   return (
