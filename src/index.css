@@ -99,9 +99,6 @@
   background: hsl(222 47% 3%) !important;
   border-radius: 0.75rem;
 }
-.leaflet-tile-pane {
-  filter: brightness(0.6) contrast(1.2) saturate(0.3) hue-rotate(180deg) invert(1);
-}
 .leaflet-control-zoom {
   border: none !important;
 }

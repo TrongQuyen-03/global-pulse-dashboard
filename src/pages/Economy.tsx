@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { useDashboardStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n';
 import { WidgetCard } from '@/components/widgets/WidgetCard';
-import { TrendingUp, TrendingDown } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 export default function Economy() {
   const economies = useDashboardStore((s) => s.economies);
+  const { t } = useI18n();
 
   const gdpData = economies.map((e) => ({ name: e.code, GDP: e.gdp, Growth: e.gdpGrowth }));
   const inflationData = economies.map((e) => ({ name: e.code, Inflation: e.inflation, Unemployment: e.unemployment }));
@@ -13,12 +14,12 @@ export default function Economy() {
   return (
     <div className="space-y-4">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-foreground">Global Economy Monitor</h1>
-        <p className="text-sm text-muted-foreground mt-1">Track GDP, inflation, unemployment and debt across major economies</p>
+        <h1 className="text-2xl font-bold text-foreground">{t('economy.title')}</h1>
+        <p className="text-sm text-muted-foreground mt-1">{t('economy.subtitle')}</p>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <WidgetCard title="GDP by Country (Trillions USD)">
+        <WidgetCard title={t('economy.gdp_chart')}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={gdpData}>
@@ -32,7 +33,7 @@ export default function Economy() {
           </div>
         </WidgetCard>
 
-        <WidgetCard title="Inflation vs Unemployment (%)">
+        <WidgetCard title={t('economy.inflation_chart')}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={inflationData}>
@@ -48,18 +49,17 @@ export default function Economy() {
         </WidgetCard>
       </div>
 
-      {/* Country table */}
-      <WidgetCard title="Economic Indicators">
+      <WidgetCard title={t('economy.indicators')}>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-border/30">
-                <th className="text-left py-2 text-muted-foreground font-medium">Country</th>
-                <th className="text-right py-2 text-muted-foreground font-medium">GDP (T)</th>
-                <th className="text-right py-2 text-muted-foreground font-medium">Growth</th>
-                <th className="text-right py-2 text-muted-foreground font-medium">Inflation</th>
-                <th className="text-right py-2 text-muted-foreground font-medium">Unemployment</th>
-                <th className="text-right py-2 text-muted-foreground font-medium">Debt/GDP</th>
+                <th className="text-left py-2 text-muted-foreground font-medium">{t('economy.country')}</th>
+                <th className="text-right py-2 text-muted-foreground font-medium">{t('economy.gdp')}</th>
+                <th className="text-right py-2 text-muted-foreground font-medium">{t('economy.growth')}</th>
+                <th className="text-right py-2 text-muted-foreground font-medium">{t('economy.inflation')}</th>
+                <th className="text-right py-2 text-muted-foreground font-medium">{t('economy.unemployment')}</th>
+                <th className="text-right py-2 text-muted-foreground font-medium">{t('economy.debt_gdp')}</th>
               </tr>
             </thead>
             <tbody>

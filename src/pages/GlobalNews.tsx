@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import { useDashboardStore } from '@/lib/store';
-import { WidgetCard } from '@/components/widgets/WidgetCard';
-import { Newspaper, AlertTriangle } from 'lucide-react';
+import { useI18n } from '@/lib/i18n';
 import { useState } from 'react';
 
-const categories = ['All', 'Economy', 'Politics', 'Markets', 'Health', 'Disaster', 'Science'];
+const categoryKeys = ['news.all', 'news.economy', 'news.politics', 'news.markets', 'news.health', 'news.disaster', 'news.science'];
+const categoryValues = ['All', 'Economy', 'Politics', 'Markets', 'Health', 'Disaster', 'Science'];
 
 export default function GlobalNews() {
   const news = useDashboardStore((s) => s.news);
+  const { t } = useI18n();
   const [filter, setFilter] = useState('All');
 
   const filtered = filter === 'All' ? news : news.filter((n) => n.category === filter);
@@ -21,26 +22,24 @@ export default function GlobalNews() {
   return (
     <div className="space-y-4">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-foreground">Global News Intelligence</h1>
-        <p className="text-sm text-muted-foreground mt-1">AI-curated global news feed with real-time analysis</p>
+        <h1 className="text-2xl font-bold text-foreground">{t('news.title')}</h1>
+        <p className="text-sm text-muted-foreground mt-1">{t('news.subtitle')}</p>
       </motion.div>
 
-      {/* Filters */}
       <div className="flex gap-2 flex-wrap">
-        {categories.map((cat) => (
+        {categoryKeys.map((key, idx) => (
           <button
-            key={cat}
-            onClick={() => setFilter(cat)}
+            key={key}
+            onClick={() => setFilter(categoryValues[idx])}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              filter === cat ? 'bg-primary text-primary-foreground' : 'glass text-muted-foreground hover:text-foreground'
+              filter === categoryValues[idx] ? 'bg-primary text-primary-foreground' : 'glass text-muted-foreground hover:text-foreground'
             }`}
           >
-            {cat}
+            {t(key)}
           </button>
         ))}
       </div>
 
-      {/* News grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filtered.map((item, i) => (
           <motion.div
